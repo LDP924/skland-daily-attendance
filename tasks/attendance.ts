@@ -62,13 +62,13 @@ async function processAccount(
   const hasAttended = await storage.getItem(attendanceKey)
 
   if (hasAttended) {
-    messageCollector.notify(`\n--- 账号 ${accountNumber}/${totalAccounts} ---`)
+    messageCollector.notify(`\n<b>--- 账号 ${accountNumber}/${totalAccounts} ---</b>`)
     messageCollector.info(`今天已经签到过，跳过`)
     stats.accounts.skipped++
     return { accountHasError: false, charactersCount: 0 }
   }
 
-  messageCollector.notify(`\n--- 账号 ${accountNumber}/${totalAccounts} ---`)
+  messageCollector.notify(`\n<b>--- 账号 ${accountNumber}/${totalAccounts} ---</b>`)
   messageCollector.info(`开始处理...`)
 
   const client = createClient()
@@ -169,7 +169,7 @@ export default defineTask<'success' | 'failed'>({
 
     const storage = useStorage()
 
-    messageCollector.notify('## 森空岛每日签到')
+    messageCollector.notify('<b>森空岛每日签到</b>')
 
     const maxRetries = Number(config.maxRetries)
 
@@ -211,7 +211,7 @@ export default defineTask<'success' | 'failed'>({
         catch (error) {
           const { stats, messageCollector } = useAttendanceContext()
           const errorMessage = error instanceof Error ? error.message : String(error)
-          messageCollector.notify(`\n--- 账号 ${accountNumber}/${tokens.length} ---`)
+          messageCollector.notify(`\n<b>--- 账号 ${accountNumber}/${tokens.length} ---</b>`)
           messageCollector.infoError(`处理失败: ${errorMessage}`)
           hasFailed = true
           stats.accounts.failed++
@@ -221,8 +221,8 @@ export default defineTask<'success' | 'failed'>({
     })
 
     // Output execution summary
-    messageCollector.notify(`\n========== 执行摘要 ==========`)
-    messageCollector.notify(`账号统计:`)
+    messageCollector.notify(`\n<b>执行摘要</b>`)
+    messageCollector.notify(`<b>账号统计:</b>`)
     messageCollector.notify(`  • 总数: ${stats.accounts.total}`)
     messageCollector.notify(`  • 成功: ${stats.accounts.successful}`)
     messageCollector.notify(`  • 跳过: ${stats.accounts.skipped}`)
@@ -233,7 +233,7 @@ export default defineTask<'success' | 'failed'>({
     // Output game-specific statistics
     if (stats.charactersByGame.size > 0) {
       for (const gameStats of stats.charactersByGame.values()) {
-        messageCollector.notify(`\n【${gameStats.gameName}】角色统计:`)
+        messageCollector.notify(`\n<b>【${gameStats.gameName}】角色统计:</b>`)
         messageCollector.notify(`  • 总数: ${gameStats.total}`)
         messageCollector.notify(`  • 本次签到成功: ${gameStats.succeeded}`)
         messageCollector.notify(`  • 今天已签到: ${gameStats.alreadyAttended}`)
